@@ -1,10 +1,17 @@
 package com.practice.crud.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Characters")
@@ -15,9 +22,18 @@ public class Character {
 	private int id;
 	
 	private String name;
-	private String gender;
-	private String age;
 	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "character", 
+			cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Movie> movie;
+
+	public List<Movie> getMovie() {
+		return movie;
+	}
+	public void setMovie(List<Movie> movie) {
+		this.movie = movie;
+	}
 	public int getId() {
 		return id;
 	}
@@ -29,17 +45,5 @@ public class Character {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	public String getAge() {
-		return age;
-	}
-	public void setAge(String age) {
-		this.age = age;
 	}
 }

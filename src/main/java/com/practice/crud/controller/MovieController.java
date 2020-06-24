@@ -41,12 +41,27 @@ public class MovieController {
 	
 	@PutMapping("/edit/{movieId}")
 	public Movie editMovieById(@RequestBody Movie movie, @PathVariable int movieId) {
-		return movieService.editProductById(movie, movieId);
+		return movieService.editMovieById(movie, movieId);
 	}
 	
-	@DeleteMapping("{movieId}")
+	@DeleteMapping("/{movieId}")
 	public void deleteMoviebyId(@PathVariable int movieId) {
 		movieService.deleteMoviebyId(movieId);
+	}
+	
+	@PostMapping("{movieId}/char/{charId}")
+	public Movie addCharacterToMovie(@PathVariable int movieId, @PathVariable int charId) {
+		return movieService.addCharacterToMovie(movieId, charId);
+	}
+	
+	@PostMapping("{movieId}/cate/{cateId}")
+	public Movie addCategoryToMovie(@PathVariable int movieId, @PathVariable int cateId) {
+		return movieService.addCategoryToMovie(movieId, cateId);
+	}
+	
+	@DeleteMapping("{movieId}/cate/{cateId}")
+	public Movie deleteCategoryInMovie(@PathVariable int movieId, @PathVariable int cateId) {
+		return movieService.deleteCategoryInMovie(movieId, cateId);
 	}
 
 }

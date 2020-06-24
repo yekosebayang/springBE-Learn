@@ -1,12 +1,15 @@
 package com.practice.crud.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.practice.crud.dao.CategoryRepo;
+import com.practice.crud.dao.MovieRepo;
 import com.practice.crud.entity.Category;
+import com.practice.crud.entity.Character;
 import com.practice.crud.entity.Movie;
 import com.practice.crud.service.CategoryService;
 
@@ -15,6 +18,9 @@ import com.practice.crud.service.CategoryService;
 public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private CategoryRepo categoryRepo;
+	
+	@Autowired
+	private MovieRepo movieRepo;
 
 	@Override
 	public Category addCategory(Category category) {
@@ -29,9 +35,15 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void deleteCategoryById(int categoryId) {
-		Optional<Category> findCategory = categoryRepo.findById(categoryId);
-		if (findCategory.toString() == "Optional.empty")
-			throw new RuntimeException("Id not exist, ID: " + categoryId);
+		
+		Category findCategory = categoryRepo.findById(categoryId).get();
+		
+		findCategory.getMovie().forEach(movie -> {
+			movie.getCategory().remove(findCategory);
+			movieRepo.save(movie);
+		});
+		
+		findCategory.setMovie(null);
 		categoryRepo.deleteById(categoryId);
 	}
 
